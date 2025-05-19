@@ -14,5 +14,3 @@ A simple two-player Tic-Tac-Toe game implemented in Java for the command line. T
 
 ---
 
-## 📸 Game Preview
-
