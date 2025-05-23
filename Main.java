@@ -6,8 +6,7 @@ public class Main {
 
     private static boolean flag = false;
     private static int turns = 0;
-    private static Set<String> moveHistory_Player1 = new TreeSet<String>();
-    private static Set<String> moveHistory_Player2 = new TreeSet<String>();
+    Player Player1 = new Player()
     private static String[] row1 = {"1", "1", "1"};
     private static String[] row2 = {"2", "2", "2"};
     private static String[] row3 = {"3", "3", "3"};
