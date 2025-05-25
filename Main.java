@@ -6,7 +6,8 @@ public class Main {
 
     private static boolean flag = false;
     private static int turns = 0;
-    Player Player1 = new Player()
+    Player Player_1 = new Player();
+    Player Player_2 = new Player();
     private static String[] row1 = {"1", "1", "1"};
     private static String[] row2 = {"2", "2", "2"};
     private static String[] row3 = {"3", "3", "3"};
@@ -64,59 +65,9 @@ public class Main {
         }
     }
 
-    public static boolean checkingPlace(String[][] a, int row, int column, String nm) {
-        if (row >= 0 && row < 3 && column >= 0 && column < 3 && !moveHistory_Player1.contains(nm) && !moveHistory_Player2.contains(nm)) {
-            if (player == 1) {
-                sheet[row][column] = "*";
-                player = 2;
-                moveHistory_Player1.add(nm);
-                turns++;
-                if (check(1)) {
-                    display(a);
-                    System.out.println("Player 1 won");
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if (player == 2) {
-                sheet[row][column] = "^";
-                player = 1;
-                moveHistory_Player2.add(nm);
-                turns++;
-                if (check(2)) {
-                    display(a);
-                    System.out.println("Player 2 won");
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            System.out.println("Invalid Move try again");
-        }
-        return false;
-    }
 
-    public static boolean check(int p) {
-        if (p == 1) {
-            for (int i = 0; i < winningSheet.length; i++) {
-                if (Arrays.stream(winningSheet[i]).allMatch(moveHistory_Player1::contains)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else if (p == 2) {
-            for (int i = 0; i < winningSheet.length; i++) {
-                if (Arrays.stream(winningSheet[i]).allMatch(moveHistory_Player2::contains)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
+
+
 
     public static void main(String[] args) {
         input(sheet);
