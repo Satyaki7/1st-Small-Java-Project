@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Player {
     public Set<String> totalMove = new TreeSet<>();
-    public Set<String> moveHistory = new TreeSet<String>();
+    private Set<String> moveHistory = new TreeSet<String>();
     private String playerName = "";
 
     public Player(){
