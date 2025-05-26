@@ -3,21 +3,17 @@ import java.text.BreakIterator;
 import java.util.*;
 
 public class Main {
-
+    static Player Player_1;
+    static Player Player_2;
     private static boolean flag = false;
     private static int turns = 0;
-    Player Player_1 = new Player();
-    Player Player_2 = new Player();
-    private static String[] row1 = {"1", "1", "1"};
-    private static String[] row2 = {"2", "2", "2"};
-    private static String[] row3 = {"3", "3", "3"};
-    private static Character[] letters = {'A', 'B', 'C'};
+    private static final Character[] letters = {'A', 'B', 'C'};
     private static int player = 1;
     private static String[][] sheet = {
-        row1,
-        row2,
-        row3,};
-    private static String[][] winningSheet = {
+            {"1", "1", "1"},
+            {"2", "2", "2"},
+            {"3", "3", "3"}};
+    private static final String[][] winningSheet = {
         {"A1", "A2", "A3"},
         {"B1", "B2", "B3"},
         {"C1", "C2", "C3"},
@@ -25,51 +21,98 @@ public class Main {
         {"C1", "B2", "A3"},
         {"A1", "B1", "C1"},
         {"A2", "B2", "C2"},
-        {"A3", "B3", "C3"},};
+        {"A3", "B3", "C3"}
+    };
 
-    public static void display(String[][] a) {
-        for (int i = 0; i < letters.length; i++) {
-            System.out.print(letters[i] + "\t");
+    public static void display() {
+        System.out.println("Player 1 history: " + Player_1.moveHistory);
+        System.out.println("Player 2 history: " + Player_2.moveHistory);
+        for (Character letter : letters) {
+            System.out.print(letter + "\t");
         }
-        System.out.println("");
-        for (int i = 0; i < a.length; i++) { //row
-            for (int j = 0; j < a[i].length; j++) { //column
-                System.out.print(a[i][j] + "\t");
+        System.out.println();
+        for (String[] strings : sheet) { //row
+            for (String string : strings) { //column
+                System.out.print(string + "\t");
             }
             System.out.println();
         }
-        if (turns != 9 && flag == false) {
+        if (turns != 9 && !flag) {
             System.out.print("Take this as reference and enter you choice of place: ");
         }
     }
-
-    public static void input(String[][] a) {
-        while (turns != 9 && flag == false) {
-            Scanner sc = new Scanner(System.in);
-            display(a);
-            String nextMove = sc.nextLine();
-            int n = Character.getNumericValue(nextMove.charAt(1));
-            if (nextMove.charAt(0) == 'A') {
-                flag = checkingPlace(a, n - 1, 0, nextMove);
-            } else if (nextMove.charAt(0) == 'B') {
-                flag = checkingPlace(a, n - 1, 1, nextMove);
-            } else if (nextMove.charAt(0) == 'C') {
-                flag = checkingPlace(a, n - 1, 2, nextMove);
-            } else {
-                System.out.print("Invalid Choice Try again");
+    public static boolean sendingData() {
+        for (String[] a : winningSheet) {
+            System.out.println(Arrays.toString(a));
+            if (player == 1 && Player_1.checkWin(a)) {
+                return true;  // Player 1 wins
+            } else if (player == 2 && Player_2.checkWin(a)) {
+                return true;  // Player 2 wins
             }
         }
-        if (turns == 9 && flag == false) {
-            display(a);
-            System.out.print("The game is over it is a DRAW!!");
+        return false;  // No win found
+    }
+
+    public static void changingDisplay(String a){
+        char[] move = a.toCharArray();
+        if (player == 1) {
+            if (Character.toUpperCase(move[0]) == 'A') {
+                sheet[Character.getNumericValue(move[1]) - 1][0] = "*";
+            } else if (Character.toUpperCase(move[0]) == 'B') {
+                sheet[Character.getNumericValue(move[1]) - 1][1] = "*";
+            } else if (Character.toUpperCase(move[0]) == 'C') {
+                sheet[Character.getNumericValue(move[1]) - 1][2] = "*";
+            }
+        } else {
+            if (Character.toUpperCase(move[0]) == 'A') {
+                sheet[Character.getNumericValue(move[1]) - 1][0] = "^";
+            } else if (Character.toUpperCase(move[0]) == 'B') {
+                sheet[Character.getNumericValue(move[1]) - 1][1] = "^";
+            } else if (Character.toUpperCase(move[0]) == 'C') {
+                sheet[Character.getNumericValue(move[1]) - 1][2] = "^";
+            }
         }
     }
-
-
-
-
-
-    public static void main(String[] args) {
-        input(sheet);
+    public static void input() {
+        while (turns != 9 && !flag) {
+            display();
+            Scanner sc = new Scanner(System.in);
+            String nextMove = sc.nextLine();
+            if(Player_1.checkMoveValidity(nextMove,letters) == false){
+                changingDisplay(nextMove);
+                if (player == 1){
+                    Player_1.storeHistory(nextMove);
+                    if(sendingData()){ //checks if the player won or not
+                        Player_1.winner();
+                        flag = true;
+                        break;
+                    }else{
+                        player = 2;
+                    }
+                }else{
+                    Player_2.storeHistory(nextMove);
+                    if (sendingData()){
+                        Player_2.winner();
+                        flag = true;
+                        break;
+                    }else{
+                        player = 1;
+                    }
+                }
+                ++turns;
+            }else System.out.println("This is not a valid move");
+        }
+        if (turns == 9 && !flag) {
+            display();
+            System.out.print("The game is over it is sheet DRAW!!");
+        }
     }
+    public static void main(String[] args) {
+        Player_1 = new Player();
+        Player_1.create();
+        Player_2 = new Player();
+        Player_2.create();
+        input();
+    }
+
 }
