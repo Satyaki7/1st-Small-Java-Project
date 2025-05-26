@@ -25,8 +25,6 @@ public class Main {
     };
 
     public static void display() {
-        System.out.println("Player 1 history: " + Player_1.moveHistory);
-        System.out.println("Player 2 history: " + Player_2.moveHistory);
         for (Character letter : letters) {
             System.out.print(letter + "\t");
         }
@@ -43,7 +41,6 @@ public class Main {
     }
     public static boolean sendingData() {
         for (String[] a : winningSheet) {
-            System.out.println(Arrays.toString(a));
             if (player == 1 && Player_1.checkWin(a)) {
                 return true;  // Player 1 wins
             } else if (player == 2 && Player_2.checkWin(a)) {
